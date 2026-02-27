@@ -7,3 +7,5 @@
 
 -- enable uuid extension for unique identifiers
 create extension if not exists "uuid-ossp";
+
+create extension if not exists "ltree";
