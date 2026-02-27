@@ -6,12 +6,20 @@
 -- All timestamps stored as unix epoch milliseconds (UTC).
 -- =====================================================
 
+-- GDPR info:
+
+-- Legitimate Interest (Article 6(1)(f)): 
+-- Storing login times is necessary for security (detecting unauthorized access) 
+-- and system administration (identifying inactive accounts).
+-- You have a right to protect your server from DDoS attacks, SQL injection, 
+-- and unauthorized access. Tracking IPs is necessary for this.
+
 -- users table
 create table if not exists "10_users" (
     id bigint not null primary key,
     email varchar(255) unique not null,
     username varchar(50) unique not null,
-    password_hash varchar(255) not null,
+    password_hash varchar(255), -- initial password sent by email
     first_name varchar(100),
     last_name varchar(100),
     display_name varchar(150) generated always as (
@@ -35,13 +43,12 @@ create table if not exists "10_users" (
     -- security
     two_factor_enabled boolean not null default false,
     two_factor_secret varchar(255),
-    backup_codes text[],
     
     -- password reset
     password_reset_token uuid,
     password_reset_expires_at bigint,
     
-    -- session tracking
+    -- session tracking, see GDPR note above
     last_login_at bigint,
     last_login_ip inet,
     login_counts_today integer not null default 0,

@@ -5,7 +5,7 @@
 -- 03. taxonomies (categories and tags)
 -- =====================================================
 
--- categories table (hierarchical)
+-- categories table (hierarchical) - “What is this post generally about?”
 create table "06_taxonomy_categories" (
     id bigint primary key,
     name varchar(100) not null,
@@ -37,7 +37,7 @@ create index idx_categories_slug on "06_taxonomy_categories"(slug);
 create index idx_categories_parent_id on "06_taxonomy_categories"(parent_id);
 create index idx_categories_path on "06_taxonomy_categories" using gist(path);
 
--- tags table
+-- tags table - “What topics, tools, or ideas appear in this post?”
 create table "07_taxonomy_tags" (
     id bigint primary key,
     name varchar(100) not null,

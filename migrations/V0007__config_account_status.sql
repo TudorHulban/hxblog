@@ -12,8 +12,8 @@ create table if not exists "05_config_account_statuses" (
 );
 
 insert into "05_config_account_statuses" (status_name, description) values
-    ('active', 'Full system access'),
-    ('inactive', 'Can edit and publish content'),
-    ('suspended', 'Can write and manage own posts'),
-    ('pending', 'Can write but not publish')
+    ('pending', 'Immediately after creation'),
+    ('active', 'Requires email verification'),
+    ('suspended', 'Manual suspension'),
+    ('inactive', 'Soft deletion')
 on conflict (status_name) do nothing;
