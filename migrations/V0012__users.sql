@@ -14,7 +14,6 @@
 -- You have a right to protect your server from DDoS attacks, SQL injection, 
 -- and unauthorized access. Tracking IPs is necessary for this.
 
--- users table
 create table if not exists "20_users" (
     id bigint not null primary key,
     email varchar(255) unique not null,

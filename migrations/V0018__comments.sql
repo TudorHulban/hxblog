@@ -5,45 +5,41 @@
 -- 04. comments
 -- =====================================================
 
--- Comments table
-CREATE TABLE "30_comments" (
-    id bigint PRIMARY KEY,
-    post_id BIGINT NOT NULL REFERENCES "25_posts"(id) ON DELETE CASCADE,
-    parent_id BIGINT REFERENCES "30_comments"(id) ON DELETE CASCADE,
-    user_id BIGINT REFERENCES "20_users"(id) ON DELETE SET NULL,
+create table "30_comments" (
+    id bigint primary key,
+    post_id bigint not null references "25_posts"(id) on delete cascade,
+    parent_id bigint references "30_comments"(id) on delete cascade,
+    user_id bigint references "20_users"(id) on delete set null,
     
-    -- Commenter info (for guest comments)
-    author_name VARCHAR(100),
-    author_email VARCHAR(255),
-    author_url VARCHAR(500),
-    author_ip INET,
+    -- commenter info (for guest comments)
+    author_name varchar(100),
+    author_email varchar(255),
+    author_url varchar(500),
+    author_ip inet,
     
-    -- Content
-    content TEXT NOT NULL,
-    content_html TEXT GENERATED ALWAYS AS (
-        regexp_replace(content, '<[^>]+>', '', 'g')
-    ) STORED,
+    -- content
+    content text not null,
     
-    -- Status
-    status_id smallint not null references "06_config_comment_statuses"(id),
+    -- status
+    status_id smallint not null default 1 references "06_config_comment_statuses"(id),
     
-    -- Engagement
-    like_count INTEGER DEFAULT 0,
-    dislike_count INTEGER DEFAULT 0,
-    report_count INTEGER DEFAULT 0,
+    -- engagement
+    like_count integer default 0,
+    dislike_count integer default 0,
+    report_count integer default 0,
     
-    -- Moderation
-    moderation_reason TEXT,
-    moderated_by BIGINT REFERENCES "20_users"(id),
-    moderated_at BIGINT,
+    -- moderation
+    moderation_reason text,
+    moderated_by bigint references "20_users"(id),
+    moderated_at bigint,
     
-    -- Metadata
-    updated_at bigint,
-    deleted_at bigint
+    -- metadata
+    updated_at bigint default null,
+    deleted_at bigint default null
 );
 
--- Indexes for comments
-CREATE INDEX idx_comments_post_id ON "30_comments"(post_id);
-CREATE INDEX idx_comments_user_id ON "30_comments"(user_id);
-CREATE INDEX idx_comments_status ON "30_comments"(status_id);
-CREATE INDEX idx_comments_parent_id ON "30_comments"(parent_id);
+-- indexes for comments
+create index idx_comments_post_id on "30_comments"(post_id);
+create index idx_comments_user_id on "30_comments"(user_id);
+create index idx_comments_status on "30_comments"(status_id);
+create index idx_comments_parent_id on "30_comments"(parent_id);

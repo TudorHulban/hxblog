@@ -5,7 +5,6 @@
 -- 03. posts and content
 -- =====================================================
 
--- posts table
 create table if not exists "25_posts" (
     id bigint primary key,
     author_id bigint not null references "20_users"(id) on delete cascade,
