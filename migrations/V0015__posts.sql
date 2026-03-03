@@ -5,10 +5,6 @@
 -- 03. posts and content
 -- =====================================================
 
--- enum types for posts
-create type post_status as enum ('draft', 'published', 'scheduled', 'pending_review', 'trash');
-create type post_format as enum ('standard', 'video', 'audio', 'gallery', 'link', 'quote');
-
 -- posts table
 create table if not exists "15_posts" (
     id bigint primary key,
@@ -22,14 +18,12 @@ create table if not exists "15_posts" (
     ) stored,
     
     -- status and visibility
-    status post_status not null default 'draft',
-    format post_format default 'standard',
-    visibility varchar(20) default 'public', -- 'public', 'private', 'password'
-    password varchar(255), -- for password-protected posts
+    status_id smallint references "05_config_post_statuses"(id),
     
     -- publishing
-    published_at bigint,
     scheduled_at bigint,
+    published_at bigint,
+    published_to bigint,
     
     -- featured image
     featured_image_id bigint,
@@ -68,7 +62,7 @@ create table if not exists "15_posts" (
 -- indexes for posts table
 create index idx_posts_author_id on "15_posts"(author_id);
 create index idx_posts_slug on "15_posts"(slug);
-create index idx_posts_status on "15_posts"(status);
+create index idx_posts_status on "05_config_post_statuses"(id);
 create index idx_posts_published_at on "15_posts"(published_at);
 create index idx_posts_featured on "15_posts"(is_featured) where is_featured = true;
 create index idx_posts_sticky on "15_posts"(is_sticky) where is_sticky = true;

@@ -31,8 +31,8 @@ create table if not exists "10_users" (
     ) stored,
     bio text,
     avatar_url varchar(500),
-    role_id smallint references  "04_config_user_roles"(id),
-    status_id smallint references "05_config_account_statuses"(id),
+    role_id smallint references  "03_config_user_roles"(id),
+    status_id smallint references "04_config_user_statuses"(id),
     
     -- email verification
     email_verified boolean not null default false,
