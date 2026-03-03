@@ -31,7 +31,7 @@ begin
         raise exception 'password_hash cannot be null';
     end if;
 
-    insert into "10_users" (
+    insert into "20_users" (
         id,
         email,
         username,
@@ -107,7 +107,7 @@ begin
         raise exception 'email_verification_sent_at cannot be null';
     end if;
 
-    update "10_users"
+    update "20_users"
     set
         email_verification_token = p_email_verification_token,
         email_verification_sent_at = p_email_verification_sent_at,
@@ -146,7 +146,7 @@ begin
         raise exception 'email_verified_at required when verifying email';
     end if;
 
-    update "10_users"
+    update "20_users"
     set
         email_verified = p_email_verified,
         email_verified_at = p_email_verified_at,
@@ -187,7 +187,7 @@ begin
         raise exception 'two_factor_secret required when enabling two factor';
     end if;
 
-    update "10_users"
+    update "20_users"
     set
         two_factor_enabled = p_two_factor_enabled,
         two_factor_secret = p_two_factor_secret,
@@ -222,7 +222,7 @@ begin
         raise exception 'last_login_at cannot be null';
     end if;
 
-    update "10_users"
+    update "20_users"
     set
         last_login_at = p_last_login_at,
         last_login_ip = p_last_login_ip,
@@ -244,7 +244,7 @@ create or replace procedure sp_reset_daily_login_counts()
 language plpgsql
 as $$
 begin
-    update "10_users"
+    update "20_users"
     set
         login_counts_today = 0
     where deleted_at is null
@@ -256,7 +256,7 @@ create or replace procedure sp_reset_daily_login_counts()
 language plpgsql
 as $$
 begin
-    update "10_users"
+    update "20_users"
     set login_counts_today = 0
     where deleted_at is null
       and login_counts_today <> 0;
