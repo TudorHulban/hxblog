@@ -55,6 +55,8 @@ create or replace procedure hx_approve_comment(
 )
 language plpgsql
 as $$
+declare 
+    v_post_id bigint;
 begin
     update
 	"30_comments"
@@ -64,8 +66,22 @@ set
 	updated_at = extract(epoch from now())
 where
 	id = p_comment_id;
+
+select	post_id into v_post_id
+from
+	"30_comments"
+where
+	id = p_comment_id;
+
+update
+	"25_posts"
+set
+	comment_count = comment_count + 1
+where
+	id = v_post_id;
 end;
 $$;
+
 
 
 create or replace procedure hx_reject_comment(
