@@ -1,4 +1,4 @@
-create or replace procedure create_comment(
+create or replace procedure hx_create_comment(
     p_id              bigint,
     p_post_id         bigint,
     p_content         text,
@@ -50,8 +50,7 @@ $$;
 -- );
 
 
-create or replace
-procedure approve_comment(
+create or replace procedure hx_approve_comment(
     p_comment_id bigint
 )
 language plpgsql
@@ -69,7 +68,7 @@ end;
 $$;
 
 
-create or replace procedure reject_comment(
+create or replace procedure hx_reject_comment(
     p_comment_id bigint
 )
 language plpgsql
@@ -83,7 +82,7 @@ end;
 $$;
 
 
-create or replace procedure mark_comment_spam(
+create or replace procedure hx_mark_comment_spam(
     p_comment_id bigint
 )
 language plpgsql
@@ -97,8 +96,7 @@ end;
 $$;
 
 
-create or replace
-procedure delete_comment(
+create or replace procedure hx_delete_comment(
     p_comment_id bigint
 )
 language plpgsql
@@ -119,7 +117,7 @@ end;
 $$;
 
 
-create or replace procedure reset_comment_pending(
+create or replace procedure hx_reset_comment_pending(
     p_comment_id bigint
 )
 language plpgsql
@@ -133,8 +131,7 @@ end;
 $$;
 
 
-create or replace
-procedure like_comment(
+create or replace procedure hx_like_comment(
     p_comment_id bigint
 )
 language plpgsql
@@ -151,8 +148,7 @@ end;
 $$;
 
 
-create or replace
-procedure dislike_comment(
+create or replace procedure hx_dislike_comment(
     p_comment_id bigint
 )
 language plpgsql
@@ -169,8 +165,7 @@ end;
 $$;
 
 
-create or replace
-procedure report_comment(
+create or replace procedure hx_report_comment(
     p_comment_id bigint
 )
 language plpgsql
@@ -202,8 +197,7 @@ end;
 $$;
 
 
-create or replace
-procedure moderate_comment(
+create or replace procedure hx_moderate_comment(
     p_comment_id bigint,
     p_status_id smallint,
     p_moderation_reason text default null,

@@ -1,4 +1,4 @@
-create or replace procedure sp_create_user(
+create or replace procedure hx_create_user(
     in p_id bigint,
     in p_email varchar(255),
     in p_username varchar(50),
@@ -70,7 +70,7 @@ $$;
 
 -- test
 
--- call sp_create_user(
+-- call hx_create_user(
 --     1700077770005000100::bigint,                         -- p_id
 --     'auditor_branch@sys.io'::varchar(255),              -- p_email
 --     'auditor_branch'::varchar(50),                      -- p_username
@@ -85,7 +85,7 @@ $$;
 -- );
 
 
-create or replace procedure sp_email_verification_started(
+create or replace procedure hx_email_verification_started(
     in p_id bigint,
     in p_email_verification_token uuid,
     in p_email_verification_sent_at bigint
@@ -124,7 +124,7 @@ end;
 $$;
 
 
-create or replace procedure sp_email_now_verified(
+create or replace procedure hx_email_now_verified(
     in p_id bigint,
     in p_email_verified boolean,
     in p_email_verified_at bigint
@@ -164,7 +164,7 @@ end;
 $$;
 
 
-create or replace procedure sp_enable_two_factor(
+create or replace procedure hx_enable_two_factor(
     in p_id bigint,
     in p_two_factor_enabled boolean,
     in p_two_factor_secret varchar(255),
@@ -204,7 +204,7 @@ end;
 $$;
 
 
-create or replace procedure sp_login(
+create or replace procedure hx_login(
     in p_id bigint,
     in p_last_login_at bigint,
     in p_last_login_ip inet
@@ -240,7 +240,7 @@ end;
 $$;
 
 
-create or replace procedure sp_reset_daily_login_counts()
+create or replace procedure hx_reset_daily_login_counts()
 language plpgsql
 as $$
 begin
@@ -252,7 +252,7 @@ begin
 end;
 $$;
 
-create or replace procedure sp_reset_daily_login_counts()
+create or replace procedure hx_reset_daily_login_counts()
 language plpgsql
 as $$
 begin
