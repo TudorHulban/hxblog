@@ -82,20 +82,3 @@ create table if not exists "26_post_revisions" (
 
 create index idx_post_revisions_post_id on "26_post_revisions"(post_id);
 
--- many-to-many relationship
-create table "16_relation_post_categories" (
-    post_id bigint not null references "25_posts"(id) on delete cascade,
-    category_id bigint not null references "10_taxonomy_categories"(id) on delete cascade,
-    primary key (post_id, category_id)
-);
-
-create index idx_post_categories_category on "16_relation_post_categories"(category_id);
-
--- many-to-many relationship
-create table "17_relation_post_tags" (
-    post_id bigint not null references "25_posts"(id) on delete cascade,
-    tag_id bigint not null references "11_taxonomy_tags"(id) on delete cascade,
-    primary key (post_id, tag_id)
-);
-
-create index idx_post_tags_tag on "17_relation_post_tags"(tag_id);
