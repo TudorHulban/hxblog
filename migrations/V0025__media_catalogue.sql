@@ -24,8 +24,8 @@ create index idx_media_uploader on "23_media_catalog"(uploader_id);
 
 
 create table if not exists "24_media_storage" (
-    media_id int8 not null references "23_media_catalog"(id) on delete cascade,
-    
+    media_id int8 not null primary key references "23_media_catalog"(id) on delete cascade,
+
     media_full bytea,
     media_thumbnail bytea,
     media_medium bytea,
@@ -34,29 +34,43 @@ create table if not exists "24_media_storage" (
     size int8 not null default 0,
     width integer not null default 0,
     height integer not null default 0,
-    hash text
+    hash text unique
 );
+
+alter table "24_media_storage" alter column media_full set storage external;
+alter table "24_media_storage" alter column media_thumbnail set storage external;
+alter table "24_media_storage" alter column media_medium set storage external;
+
 
 create or replace function hx_get_media(
     in p_id int8
 )
 returns table 
 (
-    media bytea,
-    size int8,
-    hash text
+    media_full      bytea,
+    media_thumbnail bytea,
+    media_medium    bytea,
+    size            int8,
+    width           integer,
+    height          integer,
+    hash            text
 )
 as 
 $$
 begin
-return query
-select
-	t.media, t.size, t.hash
-from
-	"24_media_storage" as t
-where
-	t.id = p_id;
+    return query
+    select
+        t.media_full,
+        t.media_thumbnail,
+        t.media_medium,
+        t.size,
+        t.width,
+        t.height,
+        t.hash
+    from
+        "24_media_storage" as t
+    where
+        t.media_id = p_id;
 end
 $$ language plpgsql stable;
-
 
