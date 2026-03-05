@@ -2,39 +2,6 @@
 -- 7. ANALYTICS & STATS
 -- =====================================================
 
--- Page views tracking
-CREATE TABLE page_views (
-    id BIGSERIAL PRIMARY KEY,
-    post_id BIGINT REFERENCES posts(id) ON DELETE CASCADE,
-    user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
-    
-    -- Request info
-    ip_address INET,
-    user_agent TEXT,
-    referer_url VARCHAR(500),
-    session_id UUID,
-    
-    -- Location (from IP)
-    country VARCHAR(100),
-    city VARCHAR(100),
-    
-    -- Device info
-    device_type VARCHAR(50),
-    browser VARCHAR(100),
-    os VARCHAR(100),
-    
-    -- Timing
-    time_on_page INTEGER, -- seconds
-    scroll_depth INTEGER, -- percentage
-    
-    -- Metadata
-    viewed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-CREATE INDEX idx_page_views_post ON page_views(post_id);
-CREATE INDEX idx_page_views_viewed_at ON page_views(viewed_at);
-CREATE INDEX idx_page_views_country ON page_views(country);
-
 -- Daily post stats aggregation
 CREATE TABLE daily_post_stats (
     id BIGSERIAL PRIMARY KEY,

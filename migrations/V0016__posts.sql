@@ -5,9 +5,9 @@
 -- 03. posts and content
 -- =====================================================
 
-create table if not exists "25_posts" (
+create table if not exists posts (
     id bigint primary key,
-    author_id bigint not null references "20_users"(id) on delete cascade,
+    author_id bigint not null references users(id) on delete cascade,
     title varchar(500) not null,
     slug varchar(500) not null unique,
     excerpt text,
@@ -17,7 +17,7 @@ create table if not exists "25_posts" (
     ) stored,
     
     -- status and visibility
-    status_id smallint not null references "05_config_post_statuses"(id),
+    status_id smallint not null references config_08_post_statuses(id),
     
     -- publishing
     scheduled_at bigint,
@@ -53,26 +53,26 @@ create table if not exists "25_posts" (
 );
 
 -- indexes for posts table
-create index idx_posts_author_id on "25_posts"(author_id);
-create index idx_posts_slug on "25_posts"(slug);
-create index idx_posts_status on "05_config_post_statuses"(id);
-create index idx_posts_published_at on "25_posts"(published_at);
-create index idx_posts_featured on "25_posts"(is_featured) where is_featured = true;
-create index idx_posts_sticky on "25_posts"(is_sticky) where is_sticky = true;
-create index idx_posts_search on "25_posts" using gin(search_vector);
+create index idx_posts_author_id on posts(author_id);
+create index idx_posts_slug on posts(slug);
+create index idx_posts_status on config_08_post_statuses(id);
+create index idx_posts_published_at on posts(published_at);
+create index idx_posts_featured on posts(is_featured) where is_featured = true;
+create index idx_posts_sticky on posts(is_sticky) where is_sticky = true;
+create index idx_posts_search on posts using gin(search_vector);
 
 
 -- post revisions for version control
-create table if not exists "26_post_revisions" (
+create table if not exists post_revisions (
     id bigint not null primary key,
-    post_id bigint not null references "25_posts"(id) on delete cascade,
+    post_id bigint not null references posts(id) on delete cascade,
     revision_number integer not null,
     title varchar(500) not null,
     content text not null,
     excerpt text,
-    created_by bigint references "20_users"(id),
+    created_by bigint references users(id),
     unique(post_id, revision_number)
 );
 
-create index idx_post_revisions_post_id on "26_post_revisions"(post_id);
+create index idx_post_revisions_post_id on post_revisions(post_id);
 

@@ -6,7 +6,7 @@
 -- =====================================================
 
 CREATE TABLE author_profile (
-    author_id int8 not null references "20_users"(id),
+    author_id int8 not null references users(id),
     
     -- Professional info
     job_title VARCHAR(200),
@@ -33,8 +33,8 @@ CREATE INDEX idx_author_profiles_featured ON author_profile(is_featured_author) 
 
 
 CREATE TABLE author_followers (
-    author_id int8 NOT NULL REFERENCES "20_users"(id) ON DELETE CASCADE,
-    follower_id int8 NOT NULL REFERENCES "20_users"(id) ON DELETE CASCADE,
+    author_id int8 NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    follower_id int8 NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     created_at int8 NOT NULL,
 
     UNIQUE(author_id, follower_id)

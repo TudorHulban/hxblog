@@ -12,7 +12,7 @@ create or replace procedure hx_create_comment(
 language plpgsql
 as $$
 begin
-    insert into "30_comments" (
+    insert into post_comments (
         id,
         post_id,
         parent_id,
@@ -59,7 +59,7 @@ declare
     v_post_id bigint;
 begin
     update
-	"30_comments"
+	post_comments
 set
 	status_id = 2,
 	report_count = 0,
@@ -69,12 +69,12 @@ where
 
 select	post_id into v_post_id
 from
-	"30_comments"
+	post_comments
 where
 	id = p_comment_id;
 
 update
-	"25_posts"
+	posts
 set
 	comment_count = comment_count + 1
 where
@@ -90,7 +90,7 @@ create or replace procedure hx_reject_comment(
 language plpgsql
 as $$
 begin
-    update "30_comments"
+    update post_comments
     set status_id = 3,
         updated_at = extract(epoch from now())
     where id = p_comment_id;
@@ -104,7 +104,7 @@ create or replace procedure hx_mark_comment_spam(
 language plpgsql
 as $$
 begin
-    update "30_comments"
+    update post_comments
     set status_id = 4,
         updated_at = extract(epoch from now())
     where id = p_comment_id;
@@ -122,7 +122,7 @@ declare
 begin
     v_timestamp := extract(epoch from now());
 update
-	"30_comments"
+	post_comments
 set
 	status_id = 5,
 	updated_at = v_timestamp,
@@ -139,7 +139,7 @@ create or replace procedure hx_reset_comment_pending(
 language plpgsql
 as $$
 begin
-    update "30_comments"
+    update post_comments
     set status_id = 1,
         updated_at = extract(epoch from now())
     where id = p_comment_id;
@@ -154,7 +154,7 @@ language plpgsql
 as $$
 begin
     update
-	"30_comments"
+	post_comments
 set
 	like_count = like_count + 1,
 	updated_at = extract(epoch from now())
@@ -171,7 +171,7 @@ language plpgsql
 as $$
 begin
     update
-	"30_comments"
+	post_comments
 set
 	dislike_count = dislike_count + 1,
 	updated_at = extract(epoch from now())
@@ -192,7 +192,7 @@ declare
 begin
     v_timestamp := extract(epoch from now());
 update
-	"30_comments"
+	post_comments
 set
 	report_count = report_count + 1,
 	updated_at = v_timestamp
@@ -202,7 +202,7 @@ where
 
 if v_new_count >= 3 then
         update
-	"30_comments"
+	post_comments
 set
 	status_id = 4,
 	updated_at = v_timestamp
@@ -228,7 +228,7 @@ begin
 
 if p_status_id = 2 then -- approved: clear reports
         update
-	"30_comments"
+	post_comments
 set
 	status_id = p_status_id,
 	report_count = 0,
@@ -240,7 +240,7 @@ where
 	id = p_comment_id;
 else -- any other status: keep report_count as-is
     update
-	"30_comments"
+	post_comments
 set
 	status_id = p_status_id,
 	moderation_reason = p_moderation_reason,

@@ -6,12 +6,12 @@
 -- =====================================================
 
 -- categories table (hierarchical) - “What is this post generally about?”
-create table "10_taxonomy_categories" (
+create table config_dynamic_01_taxonomy_categories (
     id bigint primary key,
     name varchar(100) not null,
     slug varchar(120) not null unique,
     description text,
-    parent_id bigint references "10_taxonomy_categories"(id) on delete cascade,
+    parent_id bigint references config_dynamic_01_taxonomy_categories(id) on delete cascade,
     color varchar(7) default '#3b82f6',
     icon varchar(50),
     
@@ -33,12 +33,12 @@ create table "10_taxonomy_categories" (
     path ltree -- postgresql ltree extension for hierarchical queries
 );
 
-create index idx_categories_slug on "10_taxonomy_categories"(slug);
-create index idx_categories_parent_id on "10_taxonomy_categories"(parent_id);
-create index idx_categories_path on "10_taxonomy_categories" using gist(path);
+create index idx_categories_slug on config_dynamic_01_taxonomy_categories(slug);
+create index idx_categories_parent_id on config_dynamic_01_taxonomy_categories(parent_id);
+create index idx_categories_path on config_dynamic_01_taxonomy_categories using gist(path);
 
 -- tags table - “What topics, tools, or ideas appear in this post?”
-create table "11_taxonomy_tags" (
+create table config_dynamic_02_taxonomy_tags (
     id bigint primary key,
     name varchar(100) not null,
     slug varchar(120) not null unique,
@@ -55,6 +55,6 @@ create table "11_taxonomy_tags" (
     updated_at bigint
 );
 
-create index idx_tags_slug on "11_taxonomy_tags"(slug);
-create index idx_tags_name on "11_taxonomy_tags"(name);
+create index idx_tags_slug on config_dynamic_02_taxonomy_tags(slug);
+create index idx_tags_name on config_dynamic_02_taxonomy_tags(name);
 

@@ -5,13 +5,13 @@
 -- 01. configuration - comment status
 -- =====================================================
 
-create table if not exists "06_config_comment_statuses"(
-    id smallserial primary key,
+create table if not exists config_09_comment_statuses (
+    id int2 generated always as identity primary key,
     comment_name varchar(50) not null unique,
     description text
 );
 
-insert into "06_config_comment_statuses" (comment_name, description) values
+insert into config_09_comment_statuses (comment_name, description) values
     ('pending',  'Comment submitted and awaiting moderation; not visible to readers'),
     ('approved', 'Comment approved by moderators and visible to readers'),
     ('rejected', 'Comment reviewed and not approved; not visible to readers'),

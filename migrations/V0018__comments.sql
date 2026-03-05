@@ -5,11 +5,11 @@
 -- 04. comments
 -- =====================================================
 
-create table "30_comments" (
+create table post_comments (
     id bigint primary key,
-    post_id bigint not null references "25_posts"(id) on delete cascade,
-    parent_id bigint references "30_comments"(id) on delete cascade,
-    user_id bigint references "20_users"(id) on delete set null,
+    post_id bigint not null references posts(id) on delete cascade,
+    parent_id bigint references post_comments(id) on delete cascade,
+    user_id bigint references users(id) on delete set null,
     
     -- commenter info (for guest comments)
     author_name varchar(100),
@@ -21,7 +21,7 @@ create table "30_comments" (
     content text not null,
     
     -- status
-    status_id smallint not null default 1 references "06_config_comment_statuses"(id),
+    status_id smallint not null default 1 references config_09_comment_statuses(id),
     
     -- engagement
     like_count integer default 0,
@@ -30,7 +30,7 @@ create table "30_comments" (
     
     -- moderation
     moderation_reason text,
-    moderated_by bigint references "20_users"(id),
+    moderated_by bigint references users(id),
     moderated_at bigint,
     
     -- metadata
@@ -39,7 +39,7 @@ create table "30_comments" (
 );
 
 -- indexes for comments
-create index idx_comments_post_id on "30_comments"(post_id);
-create index idx_comments_user_id on "30_comments"(user_id);
-create index idx_comments_status on "30_comments"(status_id);
-create index idx_comments_parent_id on "30_comments"(parent_id);
+create index idx_comments_post_id on post_comments(post_id);
+create index idx_comments_user_id on post_comments(user_id);
+create index idx_comments_status on post_comments(status_id);
+create index idx_comments_parent_id on post_comments(parent_id);

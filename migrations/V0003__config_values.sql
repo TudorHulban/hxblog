@@ -5,7 +5,7 @@
 -- 01. configuration - values
 -- =====================================================
 
-create table if not exists "02_config_values" (
+create table if not exists config_02_values (
     config_key text not null unique,
     config_value text
 );
@@ -20,11 +20,11 @@ as
 $$
 begin
 return query
-    select t.config_key, t.config_value from "02_config_values" t;
+    select t.config_key, t.config_value from config_02_values t;
 end;
 $$;
 
-insert into "02_config_values" (config_key, config_value) values
+insert into config_02_values (config_key, config_value) values
     ('port-blog', '9000' ),
     ('email-batch-size', '20' ),
     ('email-system-address', 'system@taraworks.eu'),

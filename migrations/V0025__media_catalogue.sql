@@ -5,9 +5,9 @@
 -- 05. media library
 -- =====================================================
 
-create table if not exists "23_media_catalog" (
+create table if not exists media_catalog (
     id int8 not null primary key,
-    uploader_id int8 not null references "20_users"(id) on delete cascade,
+    uploader_id int8 not null references users(id) on delete cascade,
     
     -- file info
     filename varchar(255) not null,
@@ -20,11 +20,11 @@ create table if not exists "23_media_catalog" (
 );
 
 -- indexes for media
-create index idx_media_uploader on "23_media_catalog"(uploader_id);
+create index idx_media_uploader on media_catalog(uploader_id);
 
 
-create table if not exists "24_media_storage" (
-    media_id int8 not null primary key references "23_media_catalog"(id) on delete cascade,
+create table if not exists media_storage (
+    media_id int8 not null primary key references media_catalog(id) on delete cascade,
 
     media_full bytea,
     media_thumbnail bytea,
@@ -37,9 +37,9 @@ create table if not exists "24_media_storage" (
     hash text unique
 );
 
-alter table "24_media_storage" alter column media_full set storage external;
-alter table "24_media_storage" alter column media_thumbnail set storage external;
-alter table "24_media_storage" alter column media_medium set storage external;
+alter table media_storage alter column media_full set storage external;
+alter table media_storage alter column media_thumbnail set storage external;
+alter table media_storage alter column media_medium set storage external;
 
 
 create or replace function hx_get_media(
@@ -68,7 +68,7 @@ begin
         t.height,
         t.hash
     from
-        "24_media_storage" as t
+        media_storage as t
     where
         t.media_id = p_id;
 end
