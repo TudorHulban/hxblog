@@ -25,7 +25,7 @@ create index idx_post_tags on "33_relation_post_tags"(tag_id);
 
 create table "34_relation_post_media" (
     post_id int8 not null references "25_posts"(id) on delete cascade,
-    media_id int8 not null references "23_media_storage"(id) on delete cascade,
+    media_id int8 not null references "23_media_catalog"(id) on delete cascade,
     primary key (post_id, media_id)
 );
 

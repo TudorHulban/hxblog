@@ -5,12 +5,35 @@
 -- 05. media library
 -- =====================================================
 
-create table if not exists "23_media_storage" (
+create table if not exists "23_media_catalog" (
     id int8 not null primary key,
-    media bytea,
-    size int8 NOT NULL,
-    width INTEGER,
-    height INTEGER,
+    uploader_id int8 not null references "20_users"(id) on delete cascade,
+    
+    -- file info
+    filename varchar(255) not null,
+    slug varchar(255) not null unique,
+    alt_text varchar(500),
+    caption text,
+    description text,
+    copyright varchar(255),
+    credit varchar(255)
+);
+
+-- indexes for media
+create index idx_media_uploader on "23_media_catalog"(uploader_id);
+
+
+create table if not exists "24_media_storage" (
+    media_id int8 not null references "23_media_catalog"(id) on delete cascade,
+    
+    media_full bytea,
+    media_thumbnail bytea,
+    media_medium bytea,
+
+    -- info for full size
+    size int8 not null default 0,
+    width integer not null default 0,
+    height integer not null default 0,
     hash text
 );
 
@@ -30,34 +53,10 @@ return query
 select
 	t.media, t.size, t.hash
 from
-	"23_media_storage" as t
+	"24_media_storage" as t
 where
 	t.id = p_id;
 end
 $$ language plpgsql stable;
 
-
-create table "24_media_catalog" (
-    id int8 not null primary key,
-    uploader_id int8 not null references "20_users"(id) on delete cascade,
-    
-    -- file info
-    filename varchar(255) not null,
-    slug varchar(255) not null unique,
-    file_id int8 not null references "23_media_storage"(id),
-    alt_text varchar(500),
-    caption text,
-    description text,
-    copyright varchar(255),
-    credit varchar(255),
-    
-    -- thumbnails
-    thumbnail_id int8 not null references "23_media_storage"(id),
-    medium_id int8 not null references "23_media_storage"(id),
-    large_id int8 not null references "23_media_storage"(id)
-);
-
--- indexes for media
-create index idx_media_uploader on "24_media_catalog"(uploader_id);
-create index idx_media_file_id on "24_media_catalog"(file_id);
 
