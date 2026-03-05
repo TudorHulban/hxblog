@@ -39,13 +39,7 @@ create table if not exists "25_posts" (
     is_featured boolean default false,
     is_sticky boolean default false,
     password_hint varchar(255),
-    
-    -- stats
-    view_count integer default 0,
-    comment_count integer default 0,
-    like_count integer default 0,
-    share_count integer default 0,
-    
+       
     -- metadata
     updated_at bigint,
     deleted_at bigint,
