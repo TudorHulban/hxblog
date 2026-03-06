@@ -6,7 +6,7 @@
 -- =====================================================
 
 CREATE TABLE author_profile (
-    author_id int8 not null references users(id),
+    author_id int8 primary key references users(id),
     
     -- Professional info
     job_title VARCHAR(200),

@@ -1,9 +1,9 @@
 create or replace procedure hx_create_comment(
-    p_id              bigint,
-    p_post_id         bigint,
+    p_id              int8,
+    p_post_id         int8,
     p_content         text,
-    p_parent_id       bigint default null,
-    p_user_id         bigint default null,
+    p_parent_id       int8 default null,
+    p_user_id         int8 default null,
     p_author_name     varchar default null,
     p_author_email    varchar default null,
     p_author_url      varchar default null,
@@ -51,12 +51,12 @@ $$;
 
 
 create or replace procedure hx_approve_comment(
-    p_comment_id bigint
+    p_comment_id int8
 )
 language plpgsql
 as $$
 declare 
-    v_post_id bigint;
+    v_post_id int8;
 begin
     update
 	post_comments
@@ -85,7 +85,7 @@ $$;
 
 
 create or replace procedure hx_reject_comment(
-    p_comment_id bigint
+    p_comment_id int8
 )
 language plpgsql
 as $$
@@ -99,7 +99,7 @@ $$;
 
 
 create or replace procedure hx_mark_comment_spam(
-    p_comment_id bigint
+    p_comment_id int8
 )
 language plpgsql
 as $$
@@ -113,12 +113,12 @@ $$;
 
 
 create or replace procedure hx_delete_comment(
-    p_comment_id bigint
+    p_comment_id int8
 )
 language plpgsql
 as $$
 declare
-    v_timestamp bigint;
+    v_timestamp int8;
 begin
     v_timestamp := extract(epoch from now());
 update
@@ -134,7 +134,7 @@ $$;
 
 
 create or replace procedure hx_reset_comment_pending(
-    p_comment_id bigint
+    p_comment_id int8
 )
 language plpgsql
 as $$
@@ -148,7 +148,7 @@ $$;
 
 
 create or replace procedure hx_like_comment(
-    p_comment_id bigint
+    p_comment_id int8
 )
 language plpgsql
 as $$
@@ -165,7 +165,7 @@ $$;
 
 
 create or replace procedure hx_dislike_comment(
-    p_comment_id bigint
+    p_comment_id int8
 )
 language plpgsql
 as $$
@@ -182,12 +182,12 @@ $$;
 
 
 create or replace procedure hx_report_comment(
-    p_comment_id bigint
+    p_comment_id int8
 )
 language plpgsql
 as $$
 declare
-    v_timestamp bigint;
+    v_timestamp int8;
     v_new_count integer;
 begin
     v_timestamp := extract(epoch from now());
@@ -214,15 +214,15 @@ $$;
 
 
 create or replace procedure hx_moderate_comment(
-    p_comment_id bigint,
+    p_comment_id int8,
     p_status_id smallint,
     p_moderation_reason text default null,
-    p_moderated_by bigint default null
+    p_moderated_by int8 default null
 )
 language plpgsql
 as $$
 declare
-    v_timestamp bigint;
+    v_timestamp int8;
 begin
     v_timestamp := extract(epoch from now());
 

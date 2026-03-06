@@ -6,33 +6,30 @@
 -- =====================================================
 
 create table if not exists posts (
-    id bigint primary key,
-    author_id bigint not null references users(id) on delete cascade,
+    id int8 primary key,
+    author_id int8 not null references users(id) on delete cascade,
     title varchar(500) not null,
     slug varchar(500) not null unique,
     excerpt text,
     content text not null,
-    content_html text generated always as ( -- for search indexing
-        regexp_replace(content, '<[^>]+>', '', 'g')
-    ) stored,
     
     -- status and visibility
     status_id smallint not null references config_08_post_statuses(id),
     
     -- publishing
-    scheduled_at bigint,
-    published_at bigint,
-    published_to bigint,
+    scheduled_at int8,
+    published_at int8,
+    visible_until int8,
     
     -- featured image
-    featured_image_id bigint,
+    featured_image_id int8,
     
     -- seo
-    meta_title varchar(70),
-    meta_description varchar(160),
-    meta_keywords text[],
-    canonical_url varchar(500),
-    og_image varchar(500),
+    meta_title varchar(70),         -- Title shown in search engines
+    meta_description varchar(160),  -- Description shown in search engines
+    meta_keywords text[],           -- Legacy SEO keywords (rarely used today)
+    canonical_url varchar(500),     -- Preferred URL for search engines
+    og_image varchar(500),          -- open graph tag, image used for social media link previews, ex. <meta property="og:image" content="https://example.com/og/my-page.jpg">
     
     -- settings
     allow_comments boolean default false,
@@ -41,8 +38,8 @@ create table if not exists posts (
     password_hint varchar(255),
        
     -- metadata
-    updated_at bigint,
-    deleted_at bigint,
+    updated_at int8,
+    deleted_at int8,
     
     -- full text search vector
     search_vector tsvector generated always as (
@@ -64,13 +61,13 @@ create index idx_posts_search on posts using gin(search_vector);
 
 -- post revisions for version control
 create table if not exists post_revisions (
-    id bigint not null primary key,
-    post_id bigint not null references posts(id) on delete cascade,
+    id int8 not null primary key,
+    post_id int8 not null references posts(id) on delete cascade,
     revision_number integer not null,
     title varchar(500) not null,
     content text not null,
     excerpt text,
-    created_by bigint references users(id),
+    created_by int8 references users(id),
     unique(post_id, revision_number)
 );
 

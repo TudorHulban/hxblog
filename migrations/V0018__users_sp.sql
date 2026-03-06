@@ -1,5 +1,5 @@
 create or replace procedure hx_create_user(
-    in p_id bigint,
+    in p_id int8,
     in p_email varchar(255),
     in p_username varchar(50),
     in p_password_hash varchar(255),
@@ -71,7 +71,7 @@ $$;
 -- test
 
 -- call hx_create_user(
---     1700077770005000100::bigint,                         -- p_id
+--     1700077770005000100::int8,                         -- p_id
 --     'auditor_branch@sys.io'::varchar(255),              -- p_email
 --     'auditor_branch'::varchar(50),                      -- p_username
 --     '$2a$10$nqUHcOLeF/5gIrQP8kAai.hfOAmrvDaLf5tGC2AbQPsD4drs8E5yS'::varchar(255), -- p_password_hash
@@ -86,9 +86,9 @@ $$;
 
 
 create or replace procedure hx_email_verification_started(
-    in p_id bigint,
+    in p_id int8,
     in p_email_verification_token uuid,
-    in p_email_verification_sent_at bigint
+    in p_email_verification_sent_at int8
 )
 language plpgsql
 as $$
@@ -125,9 +125,9 @@ $$;
 
 
 create or replace procedure hx_email_now_verified(
-    in p_id bigint,
+    in p_id int8,
     in p_email_verified boolean,
-    in p_email_verified_at bigint
+    in p_email_verified_at int8
 )
 language plpgsql
 as $$
@@ -165,10 +165,10 @@ $$;
 
 
 create or replace procedure hx_enable_two_factor(
-    in p_id bigint,
+    in p_id int8,
     in p_two_factor_enabled boolean,
     in p_two_factor_secret varchar(255),
-    in p_updated_at bigint
+    in p_updated_at int8
 )
 language plpgsql
 as $$
@@ -205,8 +205,8 @@ $$;
 
 
 create or replace procedure hx_login(
-    in p_id bigint,
-    in p_last_login_at bigint,
+    in p_id int8,
+    in p_last_login_at int8,
     in p_last_login_ip inet
 )
 language plpgsql

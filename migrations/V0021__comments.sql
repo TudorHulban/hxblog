@@ -6,10 +6,10 @@
 -- =====================================================
 
 create table post_comments (
-    id bigint primary key,
-    post_id bigint not null references posts(id) on delete cascade,
-    parent_id bigint references post_comments(id) on delete cascade,
-    user_id bigint references users(id) on delete set null,
+    id int8 primary key,
+    post_id int8 not null references posts(id) on delete cascade,
+    parent_id int8 references post_comments(id) on delete cascade,
+    user_id int8 references users(id) on delete set null,
     
     -- commenter info (for guest comments)
     author_name varchar(100),
@@ -23,19 +23,14 @@ create table post_comments (
     -- status
     status_id smallint not null default 1 references config_09_comment_statuses(id),
     
-    -- engagement
-    like_count integer default 0,
-    dislike_count integer default 0,
-    report_count integer default 0,
-    
     -- moderation
     moderation_reason text,
-    moderated_by bigint references users(id),
-    moderated_at bigint,
+    moderated_by int8 references users(id),
+    moderated_at int8,
     
     -- metadata
-    updated_at bigint default null,
-    deleted_at bigint default null
+    updated_at int8 default null,
+    deleted_at int8 default null
 );
 
 -- indexes for comments
@@ -43,3 +38,11 @@ create index idx_comments_post_id on post_comments(post_id);
 create index idx_comments_user_id on post_comments(user_id);
 create index idx_comments_status on post_comments(status_id);
 create index idx_comments_parent_id on post_comments(parent_id);
+
+
+create table if not exists post_comments_votes (
+    comment_id int8 primary key references post_comments(id),
+    votes_like integer default 0,
+    votes_dislike integer default 0,
+    votes_report integer default 0
+);

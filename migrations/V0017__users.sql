@@ -15,11 +15,11 @@
 -- and unauthorized access. Tracking IPs is necessary for this.
 
 create table if not exists users (
-    id bigint not null primary key,
+    id int8 not null primary key,
     email varchar(255) unique not null,
     username varchar(50) unique not null,
-    password_hash varchar(255), -- initial password sent by email
-    first_name varchar(100),
+    password_hash varchar(255) not null, -- initial password sent by email
+    first_name varchar(100) not null,
     last_name varchar(100),
     display_name varchar(150) generated always as (
         case 
@@ -35,9 +35,9 @@ create table if not exists users (
     
     -- email verification
     email_verified boolean not null default false,
-    email_verified_at bigint,
+    email_verified_at int8,
     email_verification_token uuid,
-    email_verification_sent_at bigint,
+    email_verification_sent_at int8,
     
     -- security
     two_factor_enabled boolean not null default false,
@@ -45,16 +45,16 @@ create table if not exists users (
     
     -- password reset
     password_reset_token uuid,
-    password_reset_expires_at bigint,
+    password_reset_expires_at int8,
     
     -- session tracking, see GDPR note above
-    last_login_at bigint,
+    last_login_at int8,
     last_login_ip inet,
     login_counts_today integer not null default 0,
     
     -- metadata
-    updated_at bigint,
-    deleted_at bigint -- soft delete
+    updated_at int8,
+    deleted_at int8 -- soft delete
 );
 
 -- indexes for users table
@@ -72,8 +72,8 @@ alter table users add constraint chk_users_email_verified_consistency check (
 
 
 create table if not exists user_sessions (
-    id bigint primary key,
-    user_id bigint not null references users(id) on delete cascade,
+    id int8 primary key,
+    user_id int8 not null references users(id) on delete cascade,
     session_token uuid not null unique,
     refresh_token uuid unique,
     ip_address inet,
@@ -83,8 +83,8 @@ create table if not exists user_sessions (
     os int2 references config_04_operating_systems(id),
     location_city varchar(100),
     location_country varchar(100),
-    expires_at bigint not null,
-    last_activity_at bigint not null,
+    expires_at int8 not null,
+    last_activity_at int8 not null,
     is_current boolean not null default false
 );
 
