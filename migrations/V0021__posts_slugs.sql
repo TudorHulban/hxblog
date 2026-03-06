@@ -2,7 +2,7 @@
 -- database: hxblog
 -- postgresql 18+
 --
--- 03. posts slugs
+-- 03. posts slugs for application cache
 -- =====================================================
 
 create table if not exists posts_slugs (

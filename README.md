@@ -23,6 +23,29 @@ WHERE n.nspname = current_schema()
 ORDER BY proname;
 ```
 
+## Partitions
+
+Check partitions with
+
+```sql
+select
+    inhrelid::regclass as partition_name
+from pg_inherits
+where inhparent = 'table-name'::regclass
+order by 1;
+```
+
+or with boundaries
+
+```sql
+select
+    relname as partition_name,
+    pg_get_expr(relpartbound, oid) as partition_range
+from pg_class
+where relkind = 'p'
+  and relname like 'metrics_03_posts_views_%'
+order by relname;
+```
 
 ## Security
 

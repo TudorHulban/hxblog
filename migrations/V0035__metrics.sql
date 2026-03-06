@@ -13,6 +13,7 @@ create table if not exists metrics_01_posts (
     view_count int8 not null default 0   
 );
 
+
 create table if not exists metrics_02_author (
     author_id int8 not null primary key references users(id) on delete cascade,
     total_posts int4 not null default 0,
@@ -23,16 +24,14 @@ create table if not exists metrics_02_author (
 
 
 create table if not exists metrics_03_posts_views (
-    id          bigint not null primary key,
-    post_id     bigint not null references posts(id) on delete cascade,
+    id          int8 not null,
+    day_date    date not null,
+    post_id     int8 not null references posts(id) on delete cascade,
     country_iso int2 not null,
     device_type int2,
     browser     int2,
     os          int2,
-    zip_code    int2 not null,
-
-    -- convert epoch → date for partitioning
-    day_date    date generated always as (to_timestamp(id)::date) stored
+    zip_code    int2 not null
 )
 partition by range (day_date);
 
@@ -53,13 +52,75 @@ begin
         part_name := 'metrics_03_posts_views_' || to_char(d + i, 'yyyymmdd');
 
         execute format(
-            'create table if not exists %i
+            'create table if not exists %I
              partition of metrics_03_posts_views
-             for values from (%l) to (%l);',
+             for values from (%L) to (%L);',
             part_name,
             d + i,
             d + i + 1
         );
     end loop;
+end;
+$$;
+
+-- call aggregate_posts_views_daily();
+create table if not exists metrics_04_posts_views_aggregated (
+    post_id int8 not null references posts(id) on delete cascade,
+    date    date not null,
+
+    views_by_country jsonb,
+    views_by_device  jsonb,
+    views_by_browser jsonb,
+    views_by_os      jsonb,
+    views_by_zip     jsonb
+);
+
+create index idx_metrics_posts_aggregated on metrics_04_posts_views_aggregated(post_id);
+
+create or replace procedure aggregate_posts_views_daily()
+language plpgsql
+as $$
+begin
+    insert into metrics_04_posts_views_aggregated (
+        post_id,
+        date,
+        views_by_country,
+        views_by_device,
+        views_by_browser,
+        views_by_os,
+        views_by_zip
+    )
+    select
+        post_id,
+        day_date,
+
+        jsonb_object_agg(country_iso, country_count),
+        jsonb_object_agg(device_type, device_count),
+        jsonb_object_agg(browser, browser_count),
+        jsonb_object_agg(os, os_count),
+        jsonb_object_agg(zip_code, zip_count)
+
+    from (
+        select
+            post_id,
+            day_date,
+
+            country_iso,
+            device_type,
+            browser,
+            os,
+            zip_code,
+
+            count(*) as country_count,
+            count(*) as device_count,
+            count(*) as browser_count,
+            count(*) as os_count,
+            count(*) as zip_count
+
+        from metrics_03_posts_views
+        group by post_id, day_date, country_iso, device_type, browser, os, zip_code
+    ) s
+    group by post_id, day_date;
+
 end;
 $$;
