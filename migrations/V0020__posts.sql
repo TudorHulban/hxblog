@@ -9,7 +9,6 @@ create table if not exists posts (
     id int8 primary key,
     author_id int8 not null references users(id) on delete cascade,
     title varchar(500) not null,
-    slug varchar(500) not null unique,
     excerpt text,
     content text not null,
     
@@ -51,7 +50,6 @@ create table if not exists posts (
 
 -- indexes for posts table
 create index idx_posts_author_id on posts(author_id);
-create index idx_posts_slug on posts(slug);
 create index idx_posts_status on config_08_post_statuses(id);
 create index idx_posts_published_at on posts(published_at);
 create index idx_posts_featured on posts(is_featured) where is_featured = true;

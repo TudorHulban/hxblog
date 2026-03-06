@@ -42,7 +42,7 @@ create index idx_comments_parent_id on post_comments(parent_id);
 
 create table if not exists post_comments_votes (
     comment_id int8 primary key references post_comments(id),
-    votes_like integer default 0,
+    votes_report integer default 0,
     votes_dislike integer default 0,
-    votes_report integer default 0
+    votes_like integer default 0 -- most hit column last
 );

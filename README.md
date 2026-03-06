@@ -22,3 +22,19 @@ WHERE n.nspname = current_schema()
   AND proname LIKE 'hx_%'
 ORDER BY proname;
 ```
+
+
+## Security
+
+Target is that app user should only have rights to call stored procedures.
+
+```sql
+revoke all on schema domain from public;
+
+grant execute on all procedures in schema api to blog_app;
+
+or
+
+revoke all on all tables in schema public from blog_app;
+grant execute on procedure hx_create_user(...) to blog_app;
+```
