@@ -42,6 +42,81 @@ alter table media_storage alter column media_thumbnail set storage external;
 alter table media_storage alter column media_medium set storage external;
 
 
+create or replace procedure hx_insert_media(
+    p_id             int8,
+    p_uploader_id    int8,
+    p_filename       text,
+    p_slug           text,
+    p_alt_text       text default null,
+    p_caption        text default null,
+    p_description    text default null,
+    p_copyright      text default null,
+    p_credit         text default null,
+
+    p_media_full      bytea default null,
+    p_media_thumbnail bytea default null,
+    p_media_medium    bytea default null,
+    p_size            int8 default 0,
+    p_width           int default 0,
+    p_height          int default 0,
+    p_hash            text default null
+)
+language plpgsql
+SECURITY DEFINER
+as $$
+begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
+    -- Insert metadata
+    insert into media_catalog (
+        id,
+        uploader_id,
+        filename,
+        slug,
+        alt_text,
+        caption,
+        description,
+        copyright,
+        credit
+    )
+    values (
+        p_id,
+        p_uploader_id,
+        p_filename,
+        p_slug,
+        p_alt_text,
+        p_caption,
+        p_description,
+        p_copyright,
+        p_credit
+    );
+
+    -- Insert binary storage
+    insert into media_storage (
+        media_id,
+        media_full,
+        media_thumbnail,
+        media_medium,
+        size,
+        width,
+        height,
+        hash
+    )
+    values (
+        p_id,
+        p_media_full,
+        p_media_thumbnail,
+        p_media_medium,
+        p_size,
+        p_width,
+        p_height,
+        p_hash
+    );
+end;
+$$;
+
+
 create or replace function hx_get_media(
     in p_id int8
 )
@@ -55,9 +130,14 @@ returns table
     height          integer,
     hash            text
 )
+language plpgsql stable
+SECURITY DEFINER
 as 
 $$
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     return query
     select
         t.media_full,
@@ -72,5 +152,5 @@ begin
     where
         t.media_id = p_id;
 end
-$$ language plpgsql stable;
+$$;
 

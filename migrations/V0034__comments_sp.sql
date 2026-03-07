@@ -10,8 +10,12 @@ create or replace procedure hx_create_comment(
     p_author_ip       inet default null
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     insert into post_comments (
         id,
         post_id,
@@ -54,10 +58,14 @@ create or replace procedure hx_approve_comment(
     p_comment_id int8
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 declare 
     v_post_id int8;
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     update
 	post_comments
 set
@@ -88,8 +96,12 @@ create or replace procedure hx_reject_comment(
     p_comment_id int8
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     update post_comments
     set status_id = 3,
         updated_at = extract(epoch from now())
@@ -102,8 +114,12 @@ create or replace procedure hx_mark_comment_spam(
     p_comment_id int8
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     update post_comments
     set status_id = 4,
         updated_at = extract(epoch from now())
@@ -116,10 +132,14 @@ create or replace procedure hx_delete_comment(
     p_comment_id int8
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 declare
     v_timestamp int8;
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     v_timestamp := extract(epoch from now());
 update
 	post_comments
@@ -137,8 +157,12 @@ create or replace procedure hx_reset_comment_pending(
     p_comment_id int8
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     update post_comments
     set status_id = 1,
         updated_at = extract(epoch from now())
@@ -151,8 +175,12 @@ create or replace procedure hx_like_comment(
     p_comment_id int8
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     update
 	post_comments
 set
@@ -168,8 +196,12 @@ create or replace procedure hx_dislike_comment(
     p_comment_id int8
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     update
 	post_comments
 set
@@ -185,11 +217,15 @@ create or replace procedure hx_report_comment(
     p_comment_id int8
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 declare
     v_timestamp int8;
     v_new_count integer;
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     v_timestamp := extract(epoch from now());
 update
 	post_comments
@@ -220,10 +256,14 @@ create or replace procedure hx_moderate_comment(
     p_moderated_by int8 default null
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 declare
     v_timestamp int8;
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     v_timestamp := extract(epoch from now());
 
 if p_status_id = 2 then -- approved: clear reports
