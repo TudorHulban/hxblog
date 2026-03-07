@@ -2,7 +2,7 @@
 -- database: hxblog
 -- postgresql 18+
 --
--- 01. configuration - operations to be tracked
+-- 04. security - operations to be tracked
 
 -- a. Compliance - Meeting regulatory requirements
 -- b. Security - Detecting unauthorized access or changes

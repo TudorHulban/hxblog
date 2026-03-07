@@ -25,7 +25,12 @@ end;
 $$;
 
 insert into config_02_values (config_key, config_value) values
-    ('port-blog', '9000' ),
+    ('blog-listens', '9000' ),
+    ('blog-title', 'DevBlog' ),
+    ('posts-per-page', '5'),
+    ('allow-comments', 'true'),
+    ('maintenance-mode', 'false'),
+    ('maintenance-message', 'site under maintenance'),
     ('email-batch-size', '20' ),
     ('email-system-address', 'system@taraworks.eu'),
     ('email-smtp-host', 'localhost'),

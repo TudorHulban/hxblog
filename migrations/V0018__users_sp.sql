@@ -1,3 +1,10 @@
+-- =====================================================
+-- database: hxblog
+-- postgresql 18+
+--
+-- 02. users logic
+-- =====================================================
+
 create or replace procedure hx_create_user(
     in p_id int8,
     in p_email varchar(255),
@@ -12,8 +19,12 @@ create or replace procedure hx_create_user(
     in p_two_factor_enabled boolean default false
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     -- required field validation
     if p_id is null then
         raise exception 'id cannot be null';
@@ -91,10 +102,14 @@ create or replace procedure hx_email_verification_started(
     in p_email_verification_sent_at int8
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 declare
     v_rows_updated integer;
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     if p_id is null then
         raise exception 'id cannot be null';
     end if;
@@ -130,10 +145,14 @@ create or replace procedure hx_email_now_verified(
     in p_email_verified_at int8
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 declare
     v_rows_updated integer;
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     if p_id is null then
         raise exception 'id cannot be null';
     end if;
@@ -171,10 +190,14 @@ create or replace procedure hx_enable_two_factor(
     in p_updated_at int8
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 declare
     v_rows_updated integer;
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     if p_id is null then
         raise exception 'id cannot be null';
     end if;
@@ -210,10 +233,14 @@ create or replace procedure hx_login(
     in p_last_login_ip inet
 )
 language plpgsql
+SECURITY DEFINER
 as $$
 declare
     v_rows_updated integer;
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     if p_id is null then
         raise exception 'id cannot be null';
     end if;
@@ -242,8 +269,12 @@ $$;
 
 create or replace procedure hx_reset_daily_login_counts()
 language plpgsql
+SECURITY DEFINER
 as $$
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     update users
     set
         login_counts_today = 0
@@ -254,8 +285,12 @@ $$;
 
 create or replace procedure hx_reset_daily_login_counts()
 language plpgsql
+SECURITY DEFINER
 as $$
 begin
+    -- lock down search path to prevent privilege escalation
+    SET LOCAL search_path = public, pg_catalog;
+
     update users
     set login_counts_today = 0
     where deleted_at is null
