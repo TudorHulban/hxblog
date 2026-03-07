@@ -7,13 +7,13 @@
 
 create or replace procedure hx_create_user(
     in p_id int8,
-    in p_email varchar(255),
-    in p_username varchar(50),
-    in p_password_hash varchar(255),
-    in p_first_name varchar(100) default null,
-    in p_last_name varchar(100) default null,
+    in p_email citext,
+    in p_username text,
+    in p_password_hash text,
+    in p_first_name text default null,
+    in p_last_name text default null,
     in p_bio text default null,
-    in p_avatar_url varchar(500) default null,
+    in p_avatar_url text default null,
     in p_role_id smallint default null,
     in p_status_id smallint default null,
     in p_two_factor_enabled boolean default false
@@ -186,7 +186,7 @@ $$;
 create or replace procedure hx_enable_two_factor(
     in p_id int8,
     in p_two_factor_enabled boolean,
-    in p_two_factor_secret varchar(255),
+    in p_two_factor_secret text,
     in p_updated_at int8
 )
 language plpgsql

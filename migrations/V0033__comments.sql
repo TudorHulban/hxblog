@@ -12,9 +12,9 @@ create table post_comments (
     user_id int8 references users(id) on delete set null,
     
     -- commenter info (for guest comments)
-    author_name varchar(100),
-    author_email varchar(255),
-    author_url varchar(500),
+    author_name text,
+    author_email citext,
+    author_url text,
     author_ip inet,
     
     -- content

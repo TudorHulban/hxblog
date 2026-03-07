@@ -7,7 +7,7 @@
 
 create table if not exists config_06_user_roles (
     id int2 generated always as identity primary key,
-    role_name varchar(50) not null unique,
+    role_name text not null unique,
     description text
 );
 

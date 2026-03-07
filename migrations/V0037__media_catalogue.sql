@@ -10,13 +10,13 @@ create table if not exists media_catalog (
     uploader_id int8 not null references users(id) on delete cascade,
     
     -- file info
-    filename varchar(255) not null,
-    slug varchar(255) not null unique,
-    alt_text varchar(500),
+    filename text not null,
+    slug text not null unique,
+    alt_text text,
     caption text,
     description text,
-    copyright varchar(255),
-    credit varchar(255)
+    copyright text,
+    credit text
 );
 
 -- indexes for media

@@ -4,9 +4,9 @@ create or replace procedure hx_create_comment(
     p_content         text,
     p_parent_id       int8 default null,
     p_user_id         int8 default null,
-    p_author_name     varchar default null,
-    p_author_email    varchar default null,
-    p_author_url      varchar default null,
+    p_author_name     text default null,
+    p_author_email    citext default null,
+    p_author_url      text default null,
     p_author_ip       inet default null
 )
 language plpgsql

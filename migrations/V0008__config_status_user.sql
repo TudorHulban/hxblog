@@ -7,7 +7,7 @@
 
 create table if not exists config_07_user_statuses (
     id int2 generated always as identity primary key,
-    status_name varchar(50) not null unique,
+    status_name text not null unique,
     description text
 );
 

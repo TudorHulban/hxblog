@@ -7,7 +7,7 @@
 
 create table if not exists config_10_country_iso (
     iso int2 not null primary key,
-    name varchar(50) not null unique
+    name text not null unique
 );
 
 INSERT INTO config_10_country_iso (iso, name) VALUES

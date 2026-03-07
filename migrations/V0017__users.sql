@@ -16,12 +16,12 @@
 
 create table if not exists users (
     id int8 not null primary key,
-    email varchar(255) unique not null,
-    username varchar(50) unique not null,
-    password_hash varchar(255) not null, -- initial password sent by email
-    first_name varchar(100) not null,
-    last_name varchar(100),
-    display_name varchar(150) generated always as (
+    email citext unique not null,
+    username text unique not null,
+    password_hash text not null, -- initial password sent by email
+    first_name text,
+    last_name text,
+    display_name text generated always as (
         case 
             when first_name is not null and last_name is not null then first_name || ' ' || last_name
             when first_name is not null then first_name
@@ -29,9 +29,9 @@ create table if not exists users (
         end
     ) stored,
     bio text,
-    avatar_url varchar(500),
-    role_id smallint not null references  config_06_user_roles(id),
-    status_id smallint not null references config_07_user_statuses(id),
+    avatar_url text,
+    role_id smallint not null references  config_06_user_roles(id) on delete restrict,
+    status_id smallint not null references config_07_user_statuses(id) on delete restrict,
     
     -- email verification
     email_verified boolean not null default false,
@@ -41,7 +41,7 @@ create table if not exists users (
     
     -- security
     two_factor_enabled boolean not null default false,
-    two_factor_secret varchar(255),
+    two_factor_secret text,
     
     -- password reset
     password_reset_token uuid,
@@ -81,8 +81,8 @@ create table if not exists user_sessions (
     device_type int2 references config_03_device_types(id),
     browser int2 references config_05_browsers(id),
     os int2 references config_04_operating_systems(id),
-    location_city varchar(100),
-    location_country varchar(100),
+    location_city text,
+    location_country text,
     expires_at int8 not null,
     last_activity_at int8 not null,
     is_current boolean not null default false

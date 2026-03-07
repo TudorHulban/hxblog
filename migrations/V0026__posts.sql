@@ -8,7 +8,7 @@
 create table if not exists posts (
     id int8 primary key,
     author_id int8 not null references users(id) on delete cascade,
-    title varchar(500) not null,
+    title text not null,
     excerpt text,
     content text not null,
     
@@ -24,17 +24,17 @@ create table if not exists posts (
     featured_image_id int8,
     
     -- seo
-    meta_title varchar(70),         -- Title shown in search engines
-    meta_description varchar(160),  -- Description shown in search engines
+    meta_title text,         -- Title shown in search engines
+    meta_description text,  -- Description shown in search engines
     meta_keywords text[],           -- Legacy SEO keywords (rarely used today)
-    canonical_url varchar(500),     -- Preferred URL for search engines
-    og_image varchar(500),          -- open graph tag, image used for social media link previews, ex. <meta property="og:image" content="https://example.com/og/my-page.jpg">
+    canonical_url text,     -- Preferred URL for search engines
+    og_image text,          -- open graph tag, image used for social media link previews, ex. <meta property="og:image" content="https://example.com/og/my-page.jpg">
     
     -- settings
     allow_comments boolean default false,
     is_featured boolean default false,
     is_sticky boolean default false,
-    password_hint varchar(255),
+    password_hint text,
        
     -- metadata
     updated_at int8,
@@ -62,7 +62,7 @@ create table if not exists post_revisions (
     id int8 not null primary key,
     post_id int8 not null references posts(id) on delete cascade,
     revision_number integer not null,
-    title varchar(500) not null,
+    title text not null,
     content text not null,
     excerpt text,
     created_by int8 references users(id),

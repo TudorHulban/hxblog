@@ -7,7 +7,7 @@
 
 create table if not exists config_09_comment_statuses (
     id int2 generated always as identity primary key,
-    comment_name varchar(50) not null unique,
+    comment_name text not null unique,
     description text
 );
 

@@ -8,16 +8,16 @@
 -- categories table (hierarchical) - “What is this post generally about?”
 create table config_dynamic_01_taxonomy_categories (
     id int8 primary key,
-    name varchar(100) not null,
-    slug varchar(120) not null unique,
+    name text not null,
+    slug text not null unique,
     description text,
     parent_id int8 references config_dynamic_01_taxonomy_categories(id) on delete cascade,
     color varchar(7) default '#3b82f6',
-    icon varchar(50),
+    icon text,
     
     -- seo
-    meta_title varchar(70),
-    meta_description varchar(160),
+    meta_title text,
+    meta_description text,
     
     -- stats
     post_count integer default 0,
@@ -40,13 +40,13 @@ create index idx_categories_path on config_dynamic_01_taxonomy_categories using 
 -- tags table - “What topics, tools, or ideas appear in this post?”
 create table config_dynamic_02_taxonomy_tags (
     id int8 primary key,
-    name varchar(100) not null,
-    slug varchar(120) not null unique,
+    name text not null,
+    slug text not null unique,
     description text,
     
     -- seo
-    meta_title varchar(70),
-    meta_description varchar(160),
+    meta_title text,
+    meta_description text,
     
     -- stats
     post_count integer not null default 0,

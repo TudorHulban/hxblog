@@ -7,8 +7,8 @@
 
 create table if not exists config_03_device_types (
     id          int2 generated always as identity primary key,
-    name        varchar(50) not null unique,
-    description varchar(255)
+    name        text not null unique,
+    description text
 );
 
 insert into config_03_device_types (name, description) values
