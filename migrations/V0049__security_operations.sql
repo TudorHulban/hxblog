@@ -17,14 +17,14 @@
 -- 1-letter suffix indicating the specific action (C=Create, U=Update, D=Delete, etc.)
 -- =====================================================
 
-create table if not exists config_10_operations(
+create table if not exists secu_01_operations(
    id int2 generated always as identity primary key,
    code varchar(4) not null unique,
    description text 
 );
 
 -- Insert all blog operations that should be audited
-insert into config_10_operations (code, description) values
+insert into secu_01_operations (code, description) values
 -- =====================================================
 -- POST OPERATIONS (PST-)
 -- =====================================================

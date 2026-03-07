@@ -2,7 +2,7 @@ create table if not exists secu_02_audit (
     id int8 primary key,
     user_id int8, -- user_id null for unidentified requests
     payload jsonb,
-    operation_id int2 not null references config_10_operations(id) on delete set null,
+    operation_id int2 not null references secu_01_operations(id) on delete set null,
     ip_address inet,
     browser int2 not null references config_05_browsers(id) on delete set null,
     result bool not null
