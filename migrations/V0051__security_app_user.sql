@@ -6,7 +6,16 @@
 -- =====================================================
 
 -- 1. Create the user
-CREATE USER app_user WITH PASSWORD 'secure_password_here';
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_roles WHERE rolname = 'app_user'
+    ) THEN
+        CREATE ROLE app_user LOGIN PASSWORD 'secure_password_here';
+    END IF;
+END
+$$;
+
 
 -- 2. Allow connecting to the database
 GRANT CONNECT ON DATABASE tara_blog TO app_user;
