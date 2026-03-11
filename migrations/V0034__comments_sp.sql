@@ -5,7 +5,7 @@ create or replace procedure hx_create_comment(
     p_parent_id       int8 default null,
     p_user_id         int8 default null,
     p_author_name     text default null,
-    p_author_email    citext default null,
+    p_author_email    text default null,
     p_author_url      text default null,
     p_author_ip       inet default null
 )
@@ -33,7 +33,7 @@ begin
         p_parent_id,
         p_user_id,
         p_author_name,
-        p_author_email,
+        lower(p_author_email),
         p_author_url,
         p_author_ip,
         p_content

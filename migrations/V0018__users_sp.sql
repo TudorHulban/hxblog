@@ -7,7 +7,7 @@
 
 create or replace procedure hx_create_user(
     in p_id int8,
-    in p_email citext,
+    in p_email text,
     in p_username text,
     in p_password_hash text,
     in p_first_name text default null,
@@ -57,7 +57,7 @@ begin
     )
     values (
         p_id,
-        p_email,
+        lower(p_email),
         p_username,
         p_password_hash,
         p_first_name,

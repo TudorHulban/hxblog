@@ -2,27 +2,38 @@ package postgres
 
 import (
 	"context"
-	"fmt"
 	"io/fs"
+	"net"
 	"os"
 	"testing"
 
 	"github.com/TudorHulban/pgtestdb"
 	"github.com/stretchr/testify/require"
+	"github.com/tudorhulban/hxhelpers"
 )
 
 // see https://medium.com/@neelkanthsingh.jr/understanding-database-connection-pools-and-the-pgx-library-in-go-3087f3c5a0c
 
 func TestPGX(t *testing.T) {
-	pgTest := pgtestdb.PGTestDB{
-		ConnectionURL: fmt.Sprintf(
-			"postgres://%s:%s@%s:%s/%s?",
-			DBUser,
-			DBPassword,
+	url := hxhelpers.Sprintf(
+		"postgres://%s:%s@%s/%s?",
+
+		DBUser,
+		DBPassword,
+		net.JoinHostPort(
 			DBHost,
 			DBPort,
-			"",
 		),
+		"",
+	)
+
+	require.Equal(t,
+		`postgres://postgres:password-box@localhost:5471/?`,
+		url,
+	)
+
+	pgTest := pgtestdb.PGTestDB{
+		ConnectionURL: url,
 
 		MigrationDirectories: []fs.FS{
 			os.DirFS("../../migrations"),

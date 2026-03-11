@@ -7,7 +7,7 @@ import (
 	"github.com/TudorHulban/log"
 	"github.com/TudorHulban/log/timestamp"
 	goerrors "github.com/tudorhulban/go-errors"
-	hxhelpers "github.com/tudorhulban/hxhelpers"
+	"github.com/tudorhulban/hxhelpers"
 
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -29,6 +29,7 @@ type ParamsDBConnection struct {
 func NewPGXPool(ctx context.Context, params *ParamsDBConnection) (*pgxpool.Pool, error) {
 	connString := hxhelpers.Sprintf(
 		"postgres://%s:%s@%s:%s/%s",
+
 		params.DBUser,
 		params.DBPassword,
 		params.DBHost,
@@ -38,12 +39,13 @@ func NewPGXPool(ctx context.Context, params *ParamsDBConnection) (*pgxpool.Pool,
 
 	dbConfig, errConfig := pgxpool.ParseConfig(connString)
 	if errConfig != nil {
-		return nil, goerrors.ErrInvalidInput{
-			Caller:     "NewPGXPool",
-			Issue:      errConfig,
-			InputName:  "ParamsDBConnection",
-			InputValue: params,
-		}
+		return nil,
+			goerrors.ErrInvalidInput{
+				Caller:     "NewPGXPool",
+				Issue:      errConfig,
+				InputName:  "ParamsDBConnection",
+				InputValue: params,
+			}
 	}
 
 	if params.EnableOnNotice {
