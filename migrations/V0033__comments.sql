@@ -13,7 +13,7 @@ create table post_comments (
     
     -- commenter info (for guest comments)
     author_name text,
-    author_email citext,
+    author_email text,
     author_url text,
     author_ip inet,
     

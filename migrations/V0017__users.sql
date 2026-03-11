@@ -16,7 +16,7 @@
 
 create table if not exists users (
     id int8 not null primary key,
-    email citext unique not null,
+    email text unique not null, -- citext was not chose intentional
     username text unique not null,
     password_hash text not null, -- initial password sent by email
     first_name text,
